@@ -103,7 +103,7 @@
 /* Configuration ************************************************************/
 
 #define LED_DELAY 100000
-
+#define DEBOUNCE_DELAY 300000
 /****************************************************************************
  * Private Types
  ****************************************************************************/
@@ -180,17 +180,23 @@ int main(int argc, char *argv[]) {
 
   uint8_t status_led = 0; // apagado
   uint8_t status_btn = 0; // n pressionado
-  while (1) {
-    /* Liga LED */
 
+  uint32_t debounce_counter = 0;
+  while (1) {
     if (~(*pGPIOA_IDR) & 1) {
-      if (!status_btn) {
-        *pGPIOC_BSRR = GPIO_BSRR_RESET(13);
+      debounce_counter++;
+      if (debounce_counter >= DEBOUNCE_DELAY) {
+        if (status_led == 0) {
+          *pGPIOC_BSRR = GPIO_BSRR_RESET(13);
+          status_led = 1;
+
+        } else {
+          *pGPIOC_BSRR = GPIO_BSRR_SET(13);
+          status_led = 0;
+        }
+
+        debounce_counter = 0;
       }
-      status_btn = 1;
-    } else {
-      *pGPIOC_BSRR = GPIO_BSRR_SET(13);
-      status_btn = 0;
     }
   }
   return EXIT_FAILURE;
