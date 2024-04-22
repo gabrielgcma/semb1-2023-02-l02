@@ -1,3 +1,7 @@
+# As respostas das questões 1 e 2 estão em branches separadas.
+
+----- 
+
 # Lista de exercícios - Sistemas Embarcados I
 
 ## Instruções
