@@ -58,3 +58,5 @@ $(DEPS):
 clean:
 	$(RM) $(OBJDIR) $(DEPDIR)
 	$(RM) $(PROGNAME).elf $(PROGNAME).bin $(PROGNAME).map
+flash:
+	openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c init -c "reset halt" -c "flash write_image erase blinky.bin 0x08000000" -c 'reset init' -c 'resume' -c exit
